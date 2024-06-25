@@ -1,0 +1,21 @@
+/* Puzzle.css */
+
+/* Common styles for input */
+.puzzle-input {
+    width: 50px; /* Adjust width as needed */
+    margin-right: 10px;
+    padding: 5px; /* Adjust padding as needed */
+    border: 1px solid #ccc; /* Example border */
+}
+
+/* Light theme */
+.light .puzzle-input {
+    color: #333; /* Text color in light theme */
+    background-color: #fff; /* Background color in light theme */
+}
+
+/* Dark theme */
+.dark .puzzle-input {
+    color: #fff; /* Text color in dark theme */
+    background-color: #333; /* Background color in dark theme */
+}

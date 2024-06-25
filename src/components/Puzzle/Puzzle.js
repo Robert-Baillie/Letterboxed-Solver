@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext   } from 'react';
 
-
+import { Container, Alert } from 'reactstrap';
+import { ThemeContext } from '../../contexts/ThemeContext';
+import './Puzzle.css'; // Import your CSS file
 function Puzzle() {
+
+    // Access theme context
+    const { theme } = useContext(ThemeContext);
+
   // Define the use State and the initial state
   const [rows, setRows] = useState({
     top: ['', '',''],
@@ -44,38 +50,41 @@ function Puzzle() {
   }
 
 
-  // Define the row render -> to be used in the return (Basically a cut down row class)
-  // Create a row based on a key from the state. for each element in the row create an input box
   const renderRow = (title, rowKey) => (
-    <div className = "row" key = {rowKey}>
+    <div className={`puzzle-row ${rowKey}`} key={rowKey}>
       <h1>{title}</h1>
-      {rows[rowKey].map((input, index) => (
-        <input
-            key = {index}
-            type = "text"
-            value = {input}
-            onChange = {(e) => handleChange(rowKey, index, e.target.value)}
-            />
-      ))}
+      <div className="input-row">
+        {rows[rowKey].map((input, index) => (
+          <input
+            key={index}
+            type="text"
+            value={input}
+            onChange={(e) => handleChange(rowKey, index, e.target.value)}
+            className={`puzzle-input ${theme}`}
+          />
+        ))}
+      </div>
     </div>
-  )
+  );
+  
+  
 
   // Return the element - a div with 4 rows rendered as above
   // Also includes any potential error messages
   return (
-    <div className = "puzzle">
+    <Container className={`puzzle  ${theme}`}>
 
     {/* Puzzle Entries */}
-    {renderRow('Top',      'top')}
-    {renderRow('Left',     'left')}
-    {renderRow('Right',    'right')}
-    {renderRow('Bottom',   'bottom')}
+    {renderRow('Top',      "top")}
+    {renderRow('Left',     "left")}
+    {renderRow('Right',    "right")}
+    {renderRow('Bottom',   "bottom")}
 
     {/* Error message: Only Render if it is true */}
-    {errorMessage ? <p className="error-message">{errorMessage}</p> : null}
+    {errorMessage ? <Alert color="danger">{errorMessage}</Alert> : null}
 
     {/*<button onClick = {handleSubmit}>Submit</button>*/}
-    </div>
+    </Container>
   );
 }
 
