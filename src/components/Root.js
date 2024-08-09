@@ -1,21 +1,28 @@
 import React, { useContext } from 'react';
-import { handleLoadLettersClick } from '../utils/buttonHandlers';
-import Puzzle from './Puzzle/Puzzle';
-
 import { Button} from 'reactstrap';
+
+
+import './Root.css'; 
+
+import Puzzle from './Puzzle/Puzzle';
 import { ThemeContext, ThemeProvider } from '../contexts/ThemeContext';
 
-/* For now this is the page which will be added onto the website - this needs to be redirected to a 'Letterboxed Solver' component in the future */
 
-// Test
+
 function RootContent() {
+  /* States and Contexts */
   const {theme, toggleTheme} = useContext(ThemeContext);
+  
 
   return (
     <div className={`content ${theme}`}>
       <h1>Letterboxed Solver</h1>
+      
+      {/* Theme button - On click we want to call toggle theme from ThemeProvider located in ThemeContext */}
       <Button onClick={toggleTheme} className="btn-primary mt-3">Toggle Theme</Button>
+      <br/>
       <Puzzle />
+     
     </div>
   )
 }

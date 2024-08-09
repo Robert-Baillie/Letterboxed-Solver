@@ -1,14 +1,23 @@
-import React, { useState, useContext   } from 'react';
+import React, { useState, useContext, useRef, useEffect   } from 'react';
 
-import { Container, Alert } from 'reactstrap';
+import { Container, Alert, Button } from 'reactstrap';
 import { ThemeContext } from '../../contexts/ThemeContext';
-import './Puzzle.css'; // Import your CSS file
+
+import './Puzzle.css'; 
+
+import { fetchLetterboxedLetters } from '../../utils/buttonHandlers';
+import { areAllRowsPopulated, readFileIntoArray, hasDoubleLetter, canFormWordFromLetters, isValidWord, solveForTwoWords } from '../../utils/puzzleHelpers';
+
+import wordsFilePath from '../../assets/words_hard.txt'
+
 function Puzzle() {
 
-    // Access theme context
-    const { theme } = useContext(ThemeContext);
+  /************* Contexts *************/
+  // Theme
+  const { theme } = useContext(ThemeContext);
 
-  // Define the use State and the initial state
+  /************* States *************/
+  // Puzzle
   const [rows, setRows] = useState({
     top: ['', '',''],
     left: ['', '',''],
@@ -16,8 +25,19 @@ function Puzzle() {
     bottom: ['', '','']
   });
 
+  // Define the solutions
+  const [solutions, setSolutions] = useState([]);
   // Define the error message
   const [errorMessage, setErrorMessage] = useState('');
+  // Use state alert to manage alert visibility
+  const [showAlert, setShowAlert] = useState(false);
+
+  /************* Refs *************/
+  // Define a reference to results section - for automated scrolling
+  const resultsRef = useRef(null);
+
+
+  /************* Functions *************/
 
   // Handle any change - called from event of changin an input box
   const handleChange = (row, index, value) => {
@@ -68,11 +88,112 @@ function Puzzle() {
   );
   
   
+  // Change this - should load on website launch
+  const loadLetters = async () => {
+    const response = await fetchLetterboxedLetters();
 
-  // Return the element - a div with 4 rows rendered as above
-  // Also includes any potential error messages
+    const letters = response.sides;
+    if (letters) {
+      const newRows = {
+        top: letters[0].split(''),
+        left: letters[3].split(''),
+        right: letters[1].split(''),
+        bottom: letters[2].split('')
+      };
+      setRows(newRows);
+  }
+  }
+
+  const resetLetters = async () => {
+      const newRows = {
+        top: ['', '',''],
+      left: ['', '',''],
+      right: ['', '',''],
+      bottom: ['', '','']}
+
+
+      setRows(newRows);
+  }
+  
+  const solvePuzzle = async () => {
+        // Step One
+    // Letter Boxed does not have words of length 1 or 2 - strip them
+    // From the rules, we cannot have two identical letters in a row - strip if this occurs
+    // console.log(`Resolved file path: ${wordsFilePath}`);
+    const textArray = await readFileIntoArray(wordsFilePath);
+
+    // console.log(textArray);
+
+    const strippedWords = [];
+    textArray.forEach((word) => {
+      if(word.length > 2 && !hasDoubleLetter(word)) {
+        strippedWords.push(word);
+      }
+    });
+
+    // Step Two
+    // Check one - Grab all valid words - Can it can be formed from the letters provided
+    // Check two - In the context of the puzzle can it be solved i,e the row/column the letter is on.
+    const validWords = [];
+    const allLetters = Object.values(rows).flat().join('');
+
+    for(let word of strippedWords) {
+      if(canFormWordFromLetters(word, allLetters)) {
+        if(isValidWord(word, allLetters)) {
+          validWords.push(word);
+        }
+      }
+    };
+
+    // Sort the valid words by length in descending order - in theory this should speed up the solving.
+    validWords.sort((a, b) => b.length - a.length);
+
+    // console.log(validWords);
+    const solutionArr = [];
+
+    validWords.forEach(word => {
+      solveForTwoWords(validWords, word, allLetters, solutionArr);
+    });
+
+    // Update the solutions
+    setSolutions(solutionArr);
+
+    // Scroll to the results section
+    if(resultsRef.current) {
+      resultsRef.current.scrollIntoView({behavior: 'smooth', block: 'start' });
+    }
+  }
+
+
+  /******************* Use Effect Hooks ****************/
+  useEffect(() => {
+
+    // Error message - if it shows, set the alert show to true and create a timer to display the message for a length of time
+    if(errorMessage) {
+      setShowAlert(true);
+      const timer = setTimeout(() => {
+        setShowAlert(false);
+      }, 3000); // Duration for fadeout
+
+      return() => clearTimeout(timer);
+    }
+  }, [errorMessage])
+
+
+  /********************** JSX Return *******************/
   return (
-    <Container className={`puzzle  ${theme}`}>
+    <Container className={`puzzle ${theme}`}>
+    {/* Error Alert */}
+    <div className="alert-container">
+      {errorMessage && (
+        <Alert
+          className={`alert-fade-in ${showAlert ? 'alert-fade-in-show' : 'alert-fade-out'}`}
+          color="danger"
+        >
+          {errorMessage}
+        </Alert>
+      )}
+    </div>
 
     {/* Puzzle Entries */}
     {renderRow('Top',      "top")}
@@ -80,10 +201,28 @@ function Puzzle() {
     {renderRow('Right',    "right")}
     {renderRow('Bottom',   "bottom")}
 
-    {/* Error message: Only Render if it is true */}
-    {errorMessage ? <Alert color="danger">{errorMessage}</Alert> : null}
+    {/* Load Daily button - On click call the load letter function */ }
+    <Button onClick={loadLetters} className = "btn-primary mt-3">Load Daily Letters</Button>
+    {/* Reset Button */}
+    <Button onClick={resetLetters} className = "btn-primary mt-3">Reset Letters</Button>
+    {/* Solve Button */}
+    <Button onClick={solvePuzzle} className = "btn-primary mt-3" disabled = {!areAllRowsPopulated(rows)}>Solve Puzzle</Button> 
+    
 
-    {/*<button onClick = {handleSubmit}>Submit</button>*/}
+    {/* Solutions Section */}
+    <div ref = {resultsRef} className="results-section">
+      <h2>Solutions:</h2>
+      {solutions.length > 0 ? (
+        <ul>
+            {solutions.map((solution, index) => (
+            <li key={index}>{solution.join(', ')}</li>
+              ))}
+        </ul>
+        ) : (
+        <p>No solutions found.</p>
+      )}
+    </div>
+
     </Container>
   );
 }

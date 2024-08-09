@@ -2,21 +2,50 @@
 ********* LIGHT THEME ***********
 ********************************/
 
-/* Body */
-
 body.light {
-    background-color: #ffffff;
-    color: #333333;
-}
+    /* Variables */
+    --background: #fbfbfe;
+    --text: #040316;
+    --primary: #477709;
+    --secondary: #f2f2f2;
+    --accent: #4fa300;
 
+    /* Global Settings */
+    background-color: var(--background);
+    color: var(--text);
+}
 
 /********************************
 ********* LIGHT THEME ***********
 ********************************/
 
-/* Body */
-
 body.dark {
-    background-color: #333333;
-    color: #ffffff;
+    --background: #010104;
+    --text: #eae9fc;
+    --primary: #c7f688;
+    --secondary: #3a3a3a;
+    --accent: #abff5c;
+
+    background-color: var(--background);
+    color: var(--text);
+}
+
+
+
+/* Global Styles */
+body { 
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    background-color: var(--primary);
+    color: var(--text); /* Ensure text color is readable */
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
