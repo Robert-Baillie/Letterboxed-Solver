@@ -19,7 +19,12 @@ function PageContent() {
       <h1>Letterboxed Solver</h1>
       
       {/* Theme button - On click we want to call toggle theme from ThemeProvider located in ThemeContext */}
-      <Button onClick={toggleTheme} className="btn-primary mt-3">Toggle Theme</Button>
+      <Button onClick={toggleTheme} 
+              className='btn-theme-toggle'
+              title="Toggle Theme">
+                {theme === 'light'  ? '🌙' : '🌞'}
+        </Button>
+        
       <br/>
       <Puzzle />
      

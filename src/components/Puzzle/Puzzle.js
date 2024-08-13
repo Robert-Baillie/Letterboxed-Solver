@@ -41,24 +41,6 @@ function Puzzle() {
 
 
   /******* Visual JSX ***********/
-  const renderRow = (title, rowKey) => (
-    <div className={`puzzle-row ${rowKey}`} key={rowKey}>
-      <h1>{title + `: `}</h1>
-      <div className="input-row">
-        {rows[rowKey].map((input, index) => (
-          <input
-            key={index}
-            type="text"
-            value={input}
-            onChange={(e) => handleChange(rowKey, index, e.target.value)}
-            className={`puzzle-input ${theme}`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-  
-
   const renderPuzzleVisual = (rows) => {
     // Define where circles will render on square container
     // index is either 0, 1, 2 based on the index of the row entry
@@ -95,8 +77,14 @@ function Puzzle() {
       <div className = "puzzle-render-visual">
           {Object.keys(rows).map((side) =>
             rows[side].map((content, index) => (
-              <div className = "circle" style ={positions[side](index)} key={`${side}-${index}` }>
-                {content}
+              <div className = "input-circle" style ={positions[side](index)} key={`${side}-${index}` }>
+                    <input
+                    type="text"
+                    value={content}
+                    onChange={(e) => handleChange(side, index, e.target.value)}
+                    className={`puzzle-input ${theme}`}
+                    maxLength={1} // Restrict input to one character
+                  />
                 </div>
             ))
           )}
@@ -245,20 +233,11 @@ function Puzzle() {
       )}
     </div>
 
-    {/* Wrap the puzzle input and buttons in a container */}
-    <div className = "puzzle-input-and-button-container">
-          {/* Puzzle Entries */}
-          <div className= "puzzle-rows-container">
-            {renderRow('Top',      "top")}
-            {renderRow('Left',     "left")}
-            {renderRow('Right',    "right")}
-            {renderRow('Bottom',   "bottom")}
-          </div>
+      {/* Square render of puzzle */}
+        {renderPuzzleVisual(rows)}
 
 
-          {/* Buttons */}
-
-
+        {/* Buttons */}
         <div className = "puzzle-buttons-container">
           {/* Load Daily button - On click call the load letter function */ }
           <Button onClick={loadLetters} className = "btn-primary mt-3">Load Daily Letters</Button>
@@ -268,18 +247,9 @@ function Puzzle() {
           <Button onClick={solvePuzzle} className = "btn-primary mt-3" disabled = {!areAllRowsPopulated(rows)}>Solve Puzzle</Button> 
         </div>
 
-          
-    </div>
-
-      {/* Square render of puzzle */}
-      {renderPuzzleVisual(rows)}
-
-
-    
-
     {/* Solutions Section */}
     <div ref = {resultsRef} className="puzzle-results-section">
-      <h2>Solutions:</h2>
+      <h2>Solutions</h2>
       {solutions.length > 0 ? (
         <ul>
             {solutions.map((solution, index) => (
