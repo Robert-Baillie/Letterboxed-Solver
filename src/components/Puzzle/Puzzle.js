@@ -3,7 +3,7 @@ import React, { useState, useContext, useRef, useEffect   } from 'react';
 import { Container, Alert, Button } from 'reactstrap';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
-import './Puzzle.css'; 
+import '../LetterboxedSolverPage.css'
 
 import { fetchLetterboxedLetters } from '../../utils/buttonHandlers';
 import { areAllRowsPopulated, readFileIntoArray, hasDoubleLetter, canFormWordFromLetters, isValidWord, solveForTwoWords } from '../../utils/puzzleHelpers';
@@ -39,6 +39,72 @@ function Puzzle() {
 
   /************* Functions *************/
 
+
+  /******* Visual JSX ***********/
+  const renderRow = (title, rowKey) => (
+    <div className={`puzzle-row ${rowKey}`} key={rowKey}>
+      <h1>{title + `: `}</h1>
+      <div className="input-row">
+        {rows[rowKey].map((input, index) => (
+          <input
+            key={index}
+            type="text"
+            value={input}
+            onChange={(e) => handleChange(rowKey, index, e.target.value)}
+            className={`puzzle-input ${theme}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+  
+
+  const renderPuzzleVisual = (rows) => {
+    // Define where circles will render on square container
+    // index is either 0, 1, 2 based on the index of the row entry
+    // 33.3 is a third, we want it to be place 1/6, 1/2 or 5/6 through the line
+    const positions = {
+      top: (index) => ({  
+                    top: '0', 
+                    left: `${index * 33.33 + 16.67}%`,
+                    transform: 'translate(-50%, -50%)', // Up and Left to appear on the line
+                    zIndex: 1 // Appear above the line
+                    }),
+      bottom: (index) => ({
+                    bottom: '0',
+                    left: `${index * 33.33 + 16.67}%`,
+                    transform: 'translate(-50%, 50%)', // Move left and down
+                    zIndex: 1,
+                    }),
+      left: (index) => ({
+                    left: '0',
+                    top: `${index * 33.33 + 16.67}%`,
+                    transform: 'translate(-50%, -50%)', // Move left and up
+                    zIndex: 1,
+                    }),
+                    right: (index) => ({
+                    right: '0',
+                    top: `${index * 33.33 + 16.67}%`,
+                    transform: 'translate(50%, -50%)', // Move right and up
+                    zIndex: 1,
+                    }),
+    };
+
+
+    return (
+      <div className = "puzzle-render-visual">
+          {Object.keys(rows).map((side) =>
+            rows[side].map((content, index) => (
+              <div className = "circle" style ={positions[side](index)} key={`${side}-${index}` }>
+                {content}
+                </div>
+            ))
+          )}
+      </div>
+    )
+  }
+
+  /****** Logic Functions *****/
   // Handle any change - called from event of changin an input box
   const handleChange = (row, index, value) => {
     // Transform the value - we want to have uppercase - trim removes whitespace
@@ -70,23 +136,7 @@ function Puzzle() {
   }
 
 
-  const renderRow = (title, rowKey) => (
-    <div className={`puzzle-row ${rowKey}`} key={rowKey}>
-      <h1>{title}</h1>
-      <div className="input-row">
-        {rows[rowKey].map((input, index) => (
-          <input
-            key={index}
-            type="text"
-            value={input}
-            onChange={(e) => handleChange(rowKey, index, e.target.value)}
-            className={`puzzle-input ${theme}`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-  
+
   
   // Change this - should load on website launch
   const loadLetters = async () => {
@@ -195,22 +245,40 @@ function Puzzle() {
       )}
     </div>
 
-    {/* Puzzle Entries */}
-    {renderRow('Top',      "top")}
-    {renderRow('Left',     "left")}
-    {renderRow('Right',    "right")}
-    {renderRow('Bottom',   "bottom")}
+    {/* Wrap the puzzle input and buttons in a container */}
+    <div className = "puzzle-input-and-button-container">
+          {/* Puzzle Entries */}
+          <div className= "puzzle-rows-container">
+            {renderRow('Top',      "top")}
+            {renderRow('Left',     "left")}
+            {renderRow('Right',    "right")}
+            {renderRow('Bottom',   "bottom")}
+          </div>
 
-    {/* Load Daily button - On click call the load letter function */ }
-    <Button onClick={loadLetters} className = "btn-primary mt-3">Load Daily Letters</Button>
-    {/* Reset Button */}
-    <Button onClick={resetLetters} className = "btn-primary mt-3">Reset Letters</Button>
-    {/* Solve Button */}
-    <Button onClick={solvePuzzle} className = "btn-primary mt-3" disabled = {!areAllRowsPopulated(rows)}>Solve Puzzle</Button> 
+
+          {/* Buttons */}
+
+
+        <div className = "puzzle-buttons-container">
+          {/* Load Daily button - On click call the load letter function */ }
+          <Button onClick={loadLetters} className = "btn-primary mt-3">Load Daily Letters</Button>
+          {/* Reset Button */}
+          <Button onClick={resetLetters} className = "btn-primary mt-3">Reset Letters</Button>
+          {/* Solve Button */}
+          <Button onClick={solvePuzzle} className = "btn-primary mt-3" disabled = {!areAllRowsPopulated(rows)}>Solve Puzzle</Button> 
+        </div>
+
+          
+    </div>
+
+      {/* Square render of puzzle */}
+      {renderPuzzleVisual(rows)}
+
+
     
 
     {/* Solutions Section */}
-    <div ref = {resultsRef} className="results-section">
+    <div ref = {resultsRef} className="puzzle-results-section">
       <h2>Solutions:</h2>
       {solutions.length > 0 ? (
         <ul>

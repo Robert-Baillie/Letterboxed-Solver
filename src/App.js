@@ -1,12 +1,12 @@
 /* Entry point to Root component*/
 
 import React from 'react';
-import Root from './components/Root';
+import LetterboxedSolverPage from './components/LetterboxedSolverPage';
 
 function App() {
   return (
     <div className="App">
-      <Root />
+      <LetterboxedSolverPage />
     </div>
   );
 }

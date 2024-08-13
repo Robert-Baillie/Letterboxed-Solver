@@ -1,0 +1,136 @@
+/* Styles for the page */
+.content {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+/* Titles */
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: var(--primary);
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent);
+}
+
+/* Puzzle Input */
+.puzzle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.puzzle-input-and-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.puzzle-rows-container {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 600px;;
+}
+
+.puzzle-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.input-row {
+    display: flex;
+    gap:10px;
+}
+
+.puzzle-input {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 1.5rem;
+    border: 1px solid var(--secondary);
+    border-radius: 4px;
+}
+
+/* Puzzle Render */
+.puzzle-render-visual {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.circle {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+
+/* Solutions */
+.puzzle-results-section {
+    margin-top: 20px;
+}
+
+.puzzle-results-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.puzzle-results-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.puzzle-results-section li {
+    padding: 5px 0;
+}
+
+
+/* Alert Styles */
+.alert-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.alert-fade-in {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.alert-fade-in-show {
+    opacity: 1;
+}
+
+.alert-fade-out {
+    opacity: 0;
+}

@@ -39,13 +39,4 @@ body {
     font-family: Arial, sans-serif;
 }
 
-button {
-    font-family: inherit;
-    cursor: pointer;
-    background-color: var(--primary);
-    color: var(--text); /* Ensure text color is readable */
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
+

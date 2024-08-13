@@ -2,14 +2,14 @@ import React, { useContext } from 'react';
 import { Button} from 'reactstrap';
 
 
-import './Root.css'; 
+import './LetterboxedSolverPage.css'; 
 
 import Puzzle from './Puzzle/Puzzle';
 import { ThemeContext, ThemeProvider } from '../contexts/ThemeContext';
 
 
 
-function RootContent() {
+function PageContent() {
   /* States and Contexts */
   const {theme, toggleTheme} = useContext(ThemeContext);
   
@@ -28,15 +28,15 @@ function RootContent() {
 }
 
 
-function Root() {
+function LetterboxedSolverPage() {
   
   return (
-    // Use the Theme provider to supply into the Root Content - all theme
+    // Use the Theme provider to supply into the Page Content - all theme
     <ThemeProvider>
-      <RootContent />
+      <PageContent />
     </ThemeProvider>
 
   );
 }
 
-export default Root;
+export default LetterboxedSolverPage;
