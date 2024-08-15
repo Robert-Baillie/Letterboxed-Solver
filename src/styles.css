@@ -3,20 +3,18 @@
 ********************************/
 
 body.light {
-    /* Variables */
     --background: #fbfbfe;
     --text: #040316;
     --primary: #477709;
     --secondary: #f2f2f2;
-    --accent: #4fa300;
+    --accent: #93c664;
 
-    /* Global Settings */
-    background-color: var(--background);
-    color: var(--text);
+
+    --shadow: rgba(0, 0, 0, 0.2);
 }
 
 /********************************
-********* LIGHT THEME ***********
+********* DARK THEME ***********
 ********************************/
 
 body.dark {
@@ -26,8 +24,24 @@ body.dark {
     --secondary: #3a3a3a;
     --accent: #abff5c;
 
-    background-color: var(--background);
-    color: var(--text);
+
+    --shadow: rgba(255, 255, 255, 0.2);
+
+}
+
+/********************************
+********* CUSTOM THEME ***********
+********************************/
+/* Random css selection */
+body.custom {
+    --background: #cecea0;
+    --text: #000000;
+    --primary: #480337;
+    --secondary: #f1ecb1;
+    --accent: #e0079c;
+
+
+    --shadow: rgba(0, 0, 0, 0.2);
 }
 
 
@@ -37,9 +51,17 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
+
+    background-color: var(--background);
+    color: var(--text);
 }
 
 h1, h2, h3, .btn-primary, .alert {
+    font-family: 'Roboto', sans-serif;
+    color: var(--primary)
+}
+
+p {
     font-family: 'Roboto', sans-serif;
     color: var(--primary)
 }

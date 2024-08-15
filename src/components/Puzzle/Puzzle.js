@@ -37,8 +37,6 @@ function Puzzle() {
   const resultsRef = useRef(null);
 
 
-  /************* Functions *************/
-
 
   /******* Visual JSX ***********/
   const renderPuzzleVisual = (rows) => {
@@ -240,11 +238,11 @@ function Puzzle() {
         {/* Buttons */}
         <div className = "puzzle-buttons-container">
           {/* Load Daily button - On click call the load letter function */ }
-          <Button onClick={loadLetters} className = "btn-primary mt-3">Load Daily Letters</Button>
+          <Button onClick={loadLetters} color ="primary" className = "btn-primary mt-3">Load Daily Letters</Button>
           {/* Reset Button */}
-          <Button onClick={resetLetters} className = "btn-primary mt-3">Reset Letters</Button>
+          <Button onClick={resetLetters} color ="primary" className = "btn-primary mt-3">Reset Letters</Button>
           {/* Solve Button */}
-          <Button onClick={solvePuzzle} className = "btn-primary mt-3" disabled = {!areAllRowsPopulated(rows)}>Solve Puzzle</Button> 
+          <Button onClick={solvePuzzle} color ="primary" className = "btn-primary mt-3" disabled = {!areAllRowsPopulated(rows)}>Solve Puzzle</Button> 
         </div>
 
     {/* Solutions Section */}

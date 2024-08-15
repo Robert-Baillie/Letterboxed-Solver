@@ -1,0 +1,60 @@
+.theme-settings-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  border-radius: 100%;
+}
+
+.btn-them-toggle,
+.theme-dropdown-btn {
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+  outline: none;
+  color: var(--text);
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+
+.theme-dropdown {
+  position: relative;
+  margin-left: 10px;
+}
+
+.theme-colour-picker-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  top: 150%; /* Position menu below buttons  - don't cover the title*/
+  background-color: var(--background);
+  right: 0;
+  z-index: 9999; /* Ensure the menu is above everything */
+  padding: 10px;
+  box-shadow: 0 0 8px var(--shadow);
+  width: 100%;
+  min-width: 220px;
+  border-radius: 10px;
+}
+
+
+@media (max-width: 768px) {
+  /* In Mobile, reduce button size */
+    .btn-theme-toggle,
+    .theme-dropdown-btn {
+      width: 30px;
+      height: 30px;
+      font-size: 1rem;
+      padding:0
+    }
+}

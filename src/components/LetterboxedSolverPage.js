@@ -1,30 +1,25 @@
-import React, { useContext } from 'react';
-import { Button} from 'reactstrap';
+import React from 'react';
+
 
 
 import './LetterboxedSolverPage.css'; 
 
+import ThemeSettings from './Theme/ThemeSettings';
 import Puzzle from './Puzzle/Puzzle';
-import { ThemeContext, ThemeProvider } from '../contexts/ThemeContext';
+import {   ThemeProvider } from '../contexts/ThemeContext';
 
 
 
 function PageContent() {
-  /* States and Contexts */
-  const {theme, toggleTheme} = useContext(ThemeContext);
+ 
   
 
   return (
-    <div className={`content ${theme}`}>
+    <div className={`content`}>
       <h1>Letterboxed Solver</h1>
-      
-      {/* Theme button - On click we want to call toggle theme from ThemeProvider located in ThemeContext */}
-      <Button onClick={toggleTheme} 
-              className='btn-theme-toggle'
-              title="Toggle Theme">
-                {theme === 'light'  ? '🌙' : '🌞'}
-        </Button>
-        
+       
+      <ThemeSettings />
+       
       <br/>
       <Puzzle />
      
