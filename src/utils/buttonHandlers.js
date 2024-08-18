@@ -1,8 +1,4 @@
 // Utility file to handle all buttons clicks
-
-/****************************
- ******* Home Page **********
-****************************/
 export async function fetchLetterboxedLetters() {
     try {
         const response = await fetch('https://backend-server-roan.vercel.app/fetchLetterBoxedSides');

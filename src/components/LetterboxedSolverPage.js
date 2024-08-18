@@ -15,7 +15,7 @@ function PageContent() {
   
 
   return (
-    <div className={`content`}>
+    <div className={`letterboxed-page-content`}>
       <h1>Letterboxed Solver</h1>
        
       <ThemeSettings />

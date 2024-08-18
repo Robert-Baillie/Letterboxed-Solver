@@ -1,8 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Container} from 'reactstrap';
 
 // Wheel from React-Color: https://uiwjs.github.io/react-color
 import Wheel from '@uiw/react-color-wheel';
+
+// JS Cookies
+import Cookies from 'js-cookie';
 
 function ThemeColourPicker({ setThemeMode}) {
     /**** States ****/
@@ -12,11 +15,11 @@ function ThemeColourPicker({ setThemeMode}) {
 
     // Set the Colours to a random default
     const [colours, setColours] = useState({
-        background: '#cecea0',
-        text:       '#000000',
-        primary:    '#480337',
-        secondary:  '#f1ecb1',
-        accent:     '#e0079c',
+        background: '#fbfbfe',
+        text:       '#031606',
+        primary:    '#477709',
+        secondary:  '#f2f2f2',
+        accent:     '#93c664',
     })
 
 
@@ -24,6 +27,22 @@ function ThemeColourPicker({ setThemeMode}) {
     const [selectedColour, setSelectedColour] = useState(null);
 
     /*********** Functions ************/
+    // Cookies and PreSaved Data 
+    const getColoursFromCookies = () => {
+        try {
+        const savedColours = Cookies.get('theme-colours');
+        return savedColours ? JSON.parse(savedColours) : null;
+    } catch (error) {
+        console.error("Failed to parse saved colours from cookies:", error);
+        return null;
+    }
+    }
+
+    const saveColoursToCookies = (colours) => {
+        console.log("saving cookies")
+        Cookies.set('theme-colours', JSON.stringify(colours), {expires: 365 });
+    }
+
      // Function to handle color change - need to pass the currently selected colour too.
      const handleColorChange = (color) => {
         const hex = color.hex;
@@ -31,17 +50,18 @@ function ThemeColourPicker({ setThemeMode}) {
 
         // If a colour is selected - change the previous colour
         if(selectedColour) {
-            setColours(prevColours => ({
-                ...prevColours,
+            const updatedColours = {
+                ...colours,
                 [selectedColour]: hex
-            }));
+            };
+
+            setColours(updatedColours);
+            saveColoursToCookies(updatedColours);
         }
 
         toggleThemeCustom()
     };
-
-
-
+    
     // Set the custom theme - calls on seThemeMode supplied by the state in ThemeSettings
     const toggleThemeCustom = ()=>  {
 
@@ -55,7 +75,7 @@ function ThemeColourPicker({ setThemeMode}) {
             --accent: ${colours.accent};
             }
         `;
-
+        
         // Clean up - check if a custom already exists - if so remove it
         // Below the define the style to be data-theme so use again to remove
         const existingStle = document.querySelector('style[data-theme="custom"]')
@@ -70,6 +90,15 @@ function ThemeColourPicker({ setThemeMode}) {
         // Set the theme
         setThemeMode('custom');
     }
+
+    /* USE EFFECT HOOKS */
+    // If cookies available set them
+    useEffect(()=> {
+        const savedColours = getColoursFromCookies();
+        if(savedColours)  setColours(savedColours);
+
+    }, []);
+
 
     /*** JSX RETURN ***/
     return (
