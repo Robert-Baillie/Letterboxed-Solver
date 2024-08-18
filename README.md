@@ -1,6 +1,6 @@
 # Letterboxed Solver
 
-A React-based web application designed to help users solve the [daily NYT "Letter Boxed" puzzle](https://www.nytimes.com/puzzles/letter-boxed_).
+A React-based web application designed to help users solve the [daily NYT "Letter Boxed" puzzle](https://www.nytimes.com/puzzles/letter-boxed).
 
 Simply head over to the the site [here](https://letterboxed-solver.vercel.app/). Input the letters as you would normally see them and click Solve!
 
@@ -8,7 +8,7 @@ This only provides potential two-word solutions.
 
 ### Other features
 
-Themes: As well as the puzzle, the site also offers two distinct light/dark themes, or you can try creating your own using the functionality at the top right of the page!
+**Themes**: As well as the puzzle, the site also offers two distinct light/dark themes, or you can try creating your own using the functionality at the top right of the page!
 
 ## Getting Started
 
