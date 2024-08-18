@@ -6,7 +6,7 @@ import { ThemeContext } from '../../contexts/ThemeContext';
 import '../LetterboxedSolverPage.css'
 
 import { fetchLetterboxedLetters } from '../../utils/buttonHandlers';
-import { areAllRowsPopulated, readFileIntoArray, hasDoubleLetter, canFormWordFromLetters, isValidWord, solveForTwoWords } from '../../utils/puzzleHelpers';
+import { areAllRowsPopulated, readFileIntoArray, canFormWordFromLetters, isValidWord, solveForTwoWords } from '../../utils/puzzleHelpers';
 
 import wordsFilePath from '../../assets/words_hard.txt'
 
@@ -158,8 +158,8 @@ function Puzzle() {
     // console.log(`Resolved file path: ${wordsFilePath}`);
     const textArray = await readFileIntoArray(wordsFilePath);
 
-    // console.log(textArray);
-
+    /*
+    18/08/24: Words now stripped before loading.
     const strippedWords = [];
     textArray.forEach((word) => {
       if(word.length > 2 && !hasDoubleLetter(word)) {
@@ -167,13 +167,15 @@ function Puzzle() {
       }
     });
 
+    */
+
     // Step Two
     // Check one - Grab all valid words - Can it can be formed from the letters provided
     // Check two - In the context of the puzzle can it be solved i,e the row/column the letter is on.
     const validWords = [];
     const allLetters = Object.values(rows).flat().join('');
 
-    for(let word of strippedWords) {
+    for(let word of textArray) {
       if(canFormWordFromLetters(word, allLetters)) {
         if(isValidWord(word, allLetters)) {
           validWords.push(word);
@@ -181,8 +183,7 @@ function Puzzle() {
       }
     };
 
-    // Sort the valid words by length in descending order - in theory this should speed up the solving.
-    validWords.sort((a, b) => b.length - a.length);
+    
 
     // console.log(validWords);
     const solutionArr = [];

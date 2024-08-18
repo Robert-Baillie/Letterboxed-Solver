@@ -6,6 +6,7 @@ export const hasDoubleLetter = (word) => {
   }
   return false;
 }
+  
 
 // Create sets for the word and letters - if the word has a letter not in the all letters set then it cannot be created, hence invalid.
 export const canFormWordFromLetters = (word, allLetters) => {
