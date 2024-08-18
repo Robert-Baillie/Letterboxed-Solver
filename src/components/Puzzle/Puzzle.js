@@ -32,6 +32,14 @@ function Puzzle() {
   // Use state alert to manage alert visibility
   const [showAlert, setShowAlert] = useState(false);
 
+  // On Component Mount populate this
+  const [dailyLetters, setDailyLetters] = useState({
+    top: ['', '',''],
+    left: ['', '',''],
+    right: ['', '',''],
+    bottom: ['', '','']
+  });
+
   /************* Refs *************/
   // Define a reference to results section - for automated scrolling
   const resultsRef = useRef(null);
@@ -125,20 +133,11 @@ function Puzzle() {
 
   
   // Change this - should load on website launch
-  const loadLetters = async () => {
-    const response = await fetchLetterboxedLetters();
-
-    const letters = response.sides;
-    if (letters) {
-      const newRows = {
-        top: letters[0].split(''),
-        left: letters[3].split(''),
-        right: letters[1].split(''),
-        bottom: letters[2].split('')
-      };
-      setRows(newRows);
+  const loadLetters = () => {
+    if(dailyLetters.top[0] === '') setErrorMessage('The daily letters were not loaded. Please refresh the page.')
+    else setRows(dailyLetters);
   }
-  }
+  
 
   const resetLetters = async () => {
       const newRows = {
@@ -152,6 +151,8 @@ function Puzzle() {
   }
   
   const solvePuzzle = async () => {
+    try {
+
         // Step One
     // Letter Boxed does not have words of length 1 or 2 - strip them
     // From the rules, we cannot have two identical letters in a row - strip if this occurs
@@ -195,14 +196,15 @@ function Puzzle() {
     // Update the solutions
     setSolutions(solutionArr);
 
-    // Scroll to the results section
-    if(resultsRef.current) {
-      resultsRef.current.scrollIntoView({behavior: 'smooth', block: 'start' });
-    }
+  } catch {
+    setErrorMessage('Failed to solve puzzle. Please try again');
+  }
+    
   }
 
 
   /******************* Use Effect Hooks ****************/
+  // Error Message
   useEffect(() => {
 
     // Error message - if it shows, set the alert show to true and create a timer to display the message for a length of time
@@ -216,6 +218,38 @@ function Puzzle() {
     }
   }, [errorMessage])
 
+
+  // Loading daily letters on mounting
+  useEffect(() => {
+    // Async function to fetch
+    const loadDailyLetters = async () => {
+      try {
+          // Try to find a response - if we get one, load in the daily letters into the split
+          const response = await fetchLetterboxedLetters();
+          const letters = response.sides;
+          if (letters) {
+            setDailyLetters({
+              top: letters[0].split(''),
+              left: letters[3].split(''),
+              right: letters[1].split(''),
+              bottom: letters[2].split('')
+            })
+            
+          };
+    } catch (error) {
+      console.error('Failed to fetch daily letters: ', error);
+    }};
+
+    if(dailyLetters.top[0] === '') loadDailyLetters() ;
+    }, [dailyLetters]); // This runs the effect if daily letters changes.
+
+
+    // Scroll to the bottom when 'Solutions' changes
+    useEffect(() => {
+    if(resultsRef.current && solutions.length > 0) {
+      resultsRef.current.scrollIntoView({behavior: 'smooth', block: 'start' });
+    }
+    }, [solutions])
 
   /********************** JSX Return *******************/
   return (
