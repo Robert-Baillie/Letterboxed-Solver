@@ -47,6 +47,11 @@
   border-radius: 10px;
 }
 
+.theme-colour-picker {
+  margin-bottom: 10px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+}
 
 @media (max-width: 768px) {
   /* In Mobile, reduce button size */
@@ -58,3 +63,40 @@
       padding:0
     }
 }
+
+
+
+/* Circle container */
+
+.colours-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.colour-circle-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.colour-circle-wrapper.selected .colour-circle {
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 10px var(--accent); 
+}
+
+.colour-circle {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+}
+
+.colour-circle-text {
+  margin-top: 5px;
+  font-size: 5px;
+  text-align: center;
+}
+

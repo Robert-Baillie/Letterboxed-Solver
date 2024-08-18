@@ -4,7 +4,7 @@
 
 body.light {
     --background: #fbfbfe;
-    --text: #040316;
+    --text: #031606;
     --primary: #477709;
     --secondary: #f2f2f2;
     --accent: #93c664;
@@ -19,10 +19,10 @@ body.light {
 
 body.dark {
     --background: #010104;
-    --text: #eae9fc;
-    --primary: #c7f688;
+    --text: #f0fce7;
+    --primary: #5d7d34;
     --secondary: #3a3a3a;
-    --accent: #abff5c;
+    --accent: #7ba347;
 
 
     --shadow: rgba(255, 255, 255, 0.2);
@@ -32,15 +32,8 @@ body.dark {
 /********************************
 ********* CUSTOM THEME ***********
 ********************************/
-/* Random css selection */
+/* To be appended on -define the box shadow */
 body.custom {
-    --background: #cecea0;
-    --text: #000000;
-    --primary: #480337;
-    --secondary: #f1ecb1;
-    --accent: #e0079c;
-
-
     --shadow: rgba(0, 0, 0, 0.2);
 }
 
@@ -63,5 +56,5 @@ h1, h2, h3, .btn-primary, .alert {
 
 p {
     font-family: 'Roboto', sans-serif;
-    color: var(--primary)
+    color: var(--text)
 }

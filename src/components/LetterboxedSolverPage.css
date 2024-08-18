@@ -19,7 +19,7 @@ h1 {
     background-color: var(--primary);
     border: 2px solid var(--primary);
     border: none;
-    color: var(--secondary);
+    color: var(--text);
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
@@ -43,7 +43,7 @@ h1 {
 .btn-primary:hover {
     background-color: var(--accent);
     border-color: var(--accent);
-    color: var(--secondary);
+    color: var(--text);
 
     transform: scale(1.05);
 }
@@ -51,7 +51,7 @@ h1 {
 .btn-primary:disabled {
     background-color: var(--accent);
     border-color: var(--accent) ;
-    color: var(--secondary) ;
+    color: var(--text) ;
     opacity: 1;
     cursor: not-allowed;
 }
@@ -59,7 +59,7 @@ h1 {
 .btn-secondary:hover {
     background-color: var(--accent);
     border-color: var(--accent);
-    color: var(--secondary);
+    color: var(--text);
 }
 
 /* Puzzle Input */
@@ -151,7 +151,7 @@ h1 {
     padding: 15px 20px;
     border-radius: 5px;
     font-size: 1rem;
-    color: var(--secondary); 
+    color: var(--text); 
     background-color: var(--primary);
     margin: 0 auto;
     display: inline-block;
