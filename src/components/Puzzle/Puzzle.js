@@ -1,14 +1,15 @@
-import React, { useState, useContext, useRef, useEffect   } from 'react';
+import React, { useState, useContext, useEffect   } from 'react';
 
-import { Container, Alert, Button } from 'reactstrap';
+import { Container, Alert, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
 import '../LetterboxedSolverPage.css'
 
-import { fetchLetterboxedLetters } from '../../utils/buttonHandlers';
+import { fetchLetterboxedLetters,fetchLetterboxedSolutions } from '../../utils/buttonHandlers';
 import { areAllRowsPopulated, readFileIntoArray, canFormWordFromLetters, isValidWord, solveForTwoWords } from '../../utils/puzzleHelpers';
 
 import wordsFilePath from '../../assets/words_hard.txt'
+import LoadingSpinner from '../Utility/LoadingSpinner';
 
 function Puzzle() {
 
@@ -27,6 +28,8 @@ function Puzzle() {
 
   // Define the solutions
   const [solutions, setSolutions] = useState([]);
+  // Define the loading state
+  const [loading, setLoading] = useState(false);
   // Define the error message
   const [errorMessage, setErrorMessage] = useState('');
   // Use state alert to manage alert visibility
@@ -40,10 +43,11 @@ function Puzzle() {
     bottom: ['', '','']
   });
 
-  /************* Refs *************/
-  // Define a reference to results section - for automated scrolling
-  const resultsRef = useRef(null);
+  // On Component Mount populate the solutions
+  const [dailySolutions, setDailySolutions] = useState(['','']);
 
+  // Modal - Popup window for the solutions rather than the bottom
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
 
   /******* Visual JSX ***********/
@@ -126,7 +130,7 @@ function Puzzle() {
       ...prevRows,
       // Set [row] to previous rows -> if index is the same as the one passed, replace the value
       [row]: prevRows[row].map((val, idx) => (idx === index ? transformedValue : val))
-    }))
+    }));
   }
 
 
@@ -151,57 +155,58 @@ function Puzzle() {
   }
   
   const solvePuzzle = async () => {
-    try {
+    // Allow Loading Symbol to open
+      setLoading(true);
+    // Set a time out => This forces a state update mid function so the loading symbol can open:
+     setTimeout(async () => { requestAnimationFrame(async () => {
+           try {
+              // Step One
+          // Letter Boxed does not have words of length 1 or 2 - strip them
+          // From the rules, we cannot have two identical letters in a row - strip if this occurs
+          // console.log(`Resolved file path: ${wordsFilePath}`);
+          const textArray = await readFileIntoArray(wordsFilePath);
 
-        // Step One
-    // Letter Boxed does not have words of length 1 or 2 - strip them
-    // From the rules, we cannot have two identical letters in a row - strip if this occurs
-    // console.log(`Resolved file path: ${wordsFilePath}`);
-    const textArray = await readFileIntoArray(wordsFilePath);
+          // Step Two
+          // Check one - Grab all valid words - Can it can be formed from the letters provided
+          // Check two - In the context of the puzzle can it be solved i,e the row/column the letter is on.
+          const validWords = [];
+          const allLetters = Object.values(rows).flat().join('');
 
-    /*
-    18/08/24: Words now stripped before loading.
-    const strippedWords = [];
-    textArray.forEach((word) => {
-      if(word.length > 2 && !hasDoubleLetter(word)) {
-        strippedWords.push(word);
-      }
-    });
+          for(let word of textArray) {
+            if(canFormWordFromLetters(word, allLetters)) {
+              if(isValidWord(word, allLetters)) {
+                validWords.push(word);
+              }
+            }
+          };
 
-    */
+          
 
-    // Step Two
-    // Check one - Grab all valid words - Can it can be formed from the letters provided
-    // Check two - In the context of the puzzle can it be solved i,e the row/column the letter is on.
-    const validWords = [];
-    const allLetters = Object.values(rows).flat().join('');
+          // console.log(validWords);
+          const solutionArr = [];
 
-    for(let word of textArray) {
-      if(canFormWordFromLetters(word, allLetters)) {
-        if(isValidWord(word, allLetters)) {
-          validWords.push(word);
-        }
-      }
-    };
+          validWords.forEach(word => {
+            solveForTwoWords(validWords, word, allLetters, solutionArr);
+          });
 
-    
+          // Update the solutions
+          setSolutions(solutionArr);
 
-    // console.log(validWords);
-    const solutionArr = [];
+        } catch {
+          setErrorMessage('Failed to solve puzzle. Please try again');
+        } finally {
+          // Loading is done, set to false
+          
+          setLoading(false);
+        setIsModalOpen(true)
 
-    validWords.forEach(word => {
-      solveForTwoWords(validWords, word, allLetters, solutionArr);
-    });
-
-    // Update the solutions
-    setSolutions(solutionArr);
-
-  } catch {
-    setErrorMessage('Failed to solve puzzle. Please try again');
+        };
+    })
+  },0);
   }
-    
-  }
 
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   /******************* Use Effect Hooks ****************/
   // Error Message
@@ -243,13 +248,24 @@ function Puzzle() {
     if(dailyLetters.top[0] === '') loadDailyLetters() ;
     }, [dailyLetters]); // This runs the effect if daily letters changes.
 
+    // Loading daily solutions on mounting
+  useEffect(() => {
+    
+    const loadDailySolution = async () => {
+      try {
+          const response = await fetchLetterboxedSolutions();
+          const sol = response.solution;
+          if (sol) {
+            setDailySolutions(sol);
+            
+          };
+    } catch (error) {
+      console.error('Failed to fetch solutions letters: ', error);
+    }};
 
-    // Scroll to the bottom when 'Solutions' changes
-    useEffect(() => {
-    if(resultsRef.current && solutions.length > 0) {
-      resultsRef.current.scrollIntoView({behavior: 'smooth', block: 'start' });
-    }
-    }, [solutions])
+    if(dailySolutions[0] === '') loadDailySolution() ;
+    }, [dailySolutions]); // This runs the effect if daily letters changes.
+  
 
   /********************** JSX Return *******************/
   return (
@@ -280,18 +296,44 @@ function Puzzle() {
           <Button onClick={solvePuzzle} color ="primary" className = "btn-primary mt-3" disabled = {!areAllRowsPopulated(rows)}>Solve Puzzle</Button> 
         </div>
 
+
+    {/* Loading Spinner - render in middle of screen */}
+    {loading ? (
+      <div className='puzzle-loading-overlay'>
+        <LoadingSpinner className = "puzzle-loading" />
+      </div>) : null}
+
+
     {/* Solutions Section */}
-    <div ref = {resultsRef} className="puzzle-results-section">
-      <h2>Solutions</h2>
-      {solutions.length > 0 ? (
-        <ul>
-            {solutions.map((solution, index) => (
-            <li key={index}>{solution.join(', ')}</li>
-              ))}
-        </ul>
-        ) : (
-        <p>No solutions found.</p>
-      )}
+    <div className="puzzle-results-section">
+      <Modal className = "puzzle-results-modal" 
+            isOpen = {isModalOpen} 
+            toggle={toggleModal}
+            backdrop = {true}
+            keyboard = {true}
+      >
+          <ModalHeader  className = "puzzle-results-modal-header" toggle={toggleModal}>Solutions</ModalHeader>
+          <ModalBody className='puzzle-results-modal-body'>
+            {solutions.length > 0 ? (
+              <ul>
+                {/* If NYT Puzzle - show solutions */}
+                {JSON.stringify(rows) === JSON.stringify(dailyLetters) && (
+                <li><strong>NYT Solution:</strong> {dailySolutions.join(', ')}</li>)}
+
+
+                {/* Generate solutions */}
+                {solutions.map((solution, index) => (
+                  <li key={index}>{solution.join(', ')}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No solutions found.</p>  
+            )}
+          </ModalBody>
+        <ModalFooter className='puzzle-results-modal-footer'>
+          <Button color="primary" onClick={toggleModal}>Close</Button>
+        </ModalFooter>
+      </Modal>
     </div>
 
     </Container>

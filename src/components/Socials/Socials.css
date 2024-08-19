@@ -6,15 +6,18 @@
     display: flex;
     align-items: center;
     padding: 10px;
+
+    gap: 5px;
 }
 
-.github-icon {
-    width: 40px;
-    height: 40px;
+.icon {
+    width: 25px;
+    height: 25px;
     transition: opacity 0.3s;
+    
 }
 
-.github-icon:hover {
+.icon:hover {
     opacity: 0.7;
 
 }

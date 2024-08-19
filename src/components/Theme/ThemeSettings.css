@@ -39,7 +39,7 @@
   top: 150%; /* Position menu below buttons  - don't cover the title*/
   background-color: var(--background);
   right: 0;
-  z-index: 9999; /* Ensure the menu is above everything */
+  z-index: 1000; /* Ensure the menu is above everything */
   padding: 10px;
   box-shadow: 0 0 8px var(--shadow);
   width: 100%;

@@ -117,35 +117,99 @@ h1 {
     flex-wrap: wrap; 
     gap: 10px; 
     justify-content: center;
+    margin-bottom: 50px;
 }
 
 
 
-/* Solutions */
+/* Solutions  Modal*/
 .puzzle-results-section {
     margin-top: 20px;
     text-align:center;
 }
 
-.puzzle-results-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    text-decoration: underline;
-
+.puzzle-results-modal {
+   
+    max-width: 350px;
+    margin: 10px auto;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    overflow: hidden;
 }
 
-.puzzle-results-section ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0 auto;
-    display: inline-block;
+.puzzle-results-modal-header {
+    border-bottom: 1px solid var(--accent);
+    background-color: var(--background);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    font-size: 1.1rem;
+
+}
+.puzzle-results-modal-header .btn-close {
+    background-color: var(--secondary); 
+}
+.puzzle-results-modal-header .btn-close:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.puzzle-results-modal-body {
+    background-color: var(--background);
+    padding: 20px;
     text-align: center;
 }
 
-.puzzle-results-section li {
-    padding: 5px 0;
+.puzzle-results-modal-body ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 auto;
+    text-align: center;
 }
 
+.puzzle-results-modal-body li {
+    padding: 1px 0;
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--shadow);
+}
+
+
+.puzzle-results-modal-body li:last-child {
+    border-bottom: none;
+}
+
+.puzzle-results-modal-footer {
+    background-color: var(--background);
+    display: flex;
+    justify-content: flex-end; 
+    padding: 15px;
+    border-top: 1px solid var(--accent); 
+}
+
+/* Loading Spinner - custom for this page */
+.puzzle-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Grey background with some transparency */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+  }
+
+  .puzzle-loading {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+  }
 
 /* Alert Styles */
 

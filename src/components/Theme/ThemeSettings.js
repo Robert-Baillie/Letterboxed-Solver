@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useRef, useEffect} from 'react';
 import { Button} from 'reactstrap';
 
 import { ThemeContext } from '../../contexts/ThemeContext'
@@ -14,6 +14,8 @@ function ThemeSettings() {
     /***********  States  ***********/
     const [isMenuOpen, setIsMenuOpen]= useState(false);
     
+    /****** Refs  ***************/
+    const menuRef = useRef(null);
 
     /******* Functions ************/
     // Menu - simply switch depending on the previous
@@ -25,6 +27,26 @@ function ThemeSettings() {
     const toggleTheme = () =>{
         setThemeMode((theme ==='dark' || theme === 'custom') ? 'light' : 'dark')
     }
+
+    // Handle clicks outside of the dropdown menu
+    const handleClickOutside = (event) => {
+        console.log("Handle Click - Theme Settings")
+        if(menuRef.current && !menuRef.current.contains(event.target))
+            {   
+                console.log("Here");
+                setIsMenuOpen(false);
+            }
+    }
+
+
+    /*********** Use Effect Hooks *************/
+    // Attatch an event listener - mousedown
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+    }, []);
 
     return (
         <div className='theme-settings-container'>
@@ -38,7 +60,7 @@ function ThemeSettings() {
 
 
             {/* Menu expanding button */}
-            <div className="theme-dropdown">
+            <div className="theme-dropdown"  ref = {menuRef} >
                 {/* Dropdown button to expand section - if open show a collapse symbol */}
                 <Button onClick={toggleMenu} color = "secondary" className="theme-dropdown-btn">
                 {isMenuOpen ? '-' : '+'}
