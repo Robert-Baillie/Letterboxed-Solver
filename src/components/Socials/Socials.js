@@ -4,7 +4,6 @@ import "./Socials.css"
 
 import { ThemeContext } from '../../contexts/ThemeContext';
 
-import socials from '../Socials/socials.json'
 
 const Socials = () => {
     /***********  Context  ***********/
@@ -16,17 +15,18 @@ const Socials = () => {
                         )
 
     const linkedInSrc = (require('../../assets/icons/linkedin/LI-In-Bug.svg').default)
-    
+    /*
     const emailSrc = (theme === 'dark' ? require('../../assets/icons/email/email_dark_theme.svg').default
                 : require('../../assets/icons/email/email_light_theme.svg').default
-)
+                */
+
 
     return (
         // Return a simple container carry my github.
         <Container className = "socials">
             {/* GitHub */}
             <a
-                href = {socials.githubUrl}
+                href = "https://github.com/Robert-Baillie"
                 target = "_blank"
                 rel="noopener noreferrer"
                 aria-label = "GitHub"
@@ -40,7 +40,7 @@ const Socials = () => {
             
             {/*LinkedIn */}
             <a
-                href = {socials.linkedinUrl}
+                href = "https://www.linkedin.com/in/robert-baillie-a521a7196/"
                 target = "_blank"
                 rel="noopener noreferrer"
                 aria-label = "LinkedIn"
@@ -52,19 +52,7 @@ const Socials = () => {
                 />
             </a>
 
-            {/*Email*/}
-            <a
-                href = {socials.email}
-                target = "_blank"
-                rel="noopener noreferrer"
-                aria-label = "Email"
-            >
-                <img
-                    src={emailSrc}
-                    alt="Email"
-                    className="icon"
-                />
-            </a>
+         
         </Container>
     )
 }
