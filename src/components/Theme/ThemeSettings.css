@@ -73,6 +73,7 @@
   gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 5px;
+  justify-content: center;
 }
 
 .colour-circle-wrapper {
@@ -96,7 +97,7 @@
 
 .colour-circle-text {
   margin-top: 5px;
-  font-size: 5px;
+  font-size: 10px;
   text-align: center;
 }
 
